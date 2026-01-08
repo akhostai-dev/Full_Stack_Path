@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Path – Full Stack Awakening</title>
+
+  <!--Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!--Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+  <style>
+    :root {
+      --dark-bg: #03040a;
+      --light-bg: #f4f7ff;
+      --accent: #7df9ff;
+      --text-dark: #0a0a0a;
+      --text-light: #eaeaff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-light);
+      overflow-x: hidden;
+      transition: background 1.5s ease, color 1.5s ease;
+    }
+
+    body.light {
+      background: var(--light-bg);
+      color: var(--text-dark);
+    }
+
+    canvas.webgl {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      letter-spacing: 3px;
+      text-shadow: 0 0 40px var(--accent);
+    }
+
+    .subtitle {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      opacity: 0.85;
+    }
+
+    section {
+      padding: 6rem 8vw;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(14px);
+      border-radius: 22px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 0 50px rgba(0,0,0,0.6);
+      transform: translateY(60px);
+      opacity: 0;
+      transition: all 1.2s ease;
+    }
+
+    body.light .card {
+      background: rgba(0,0,0,0.05);
+    }
+
+    .card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 2.2rem;
+    }
+
+    ul {
+      margin-top: 1rem;
+      line-height: 2;
+    }
+
+    .toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      opacity: 0.6;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 4rem 6vw; }
+      h2 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="toggle">☀ / 🌑</button>
+
+<canvas class="webgl"></canvas>
+
+<header>
+  <div>
+    <h1>COSMIC PATH</h1>
+    <p class="subtitle">A Full‑Stack Developer Awakening — From Zero to Universe Builder</p>
+  </div>
+</header>
+
+<section>
+  <div class="card">
+    <h2>🌱 Phase 1 — Foundations</h2>
+    <ul>
+      <li>HTML — structure of reality</li>
+      <li>CSS — emotion, layout, animation</li>
+      <li>JavaScript — logic, interaction, life</li>
+      <li>Git & GitHub — memory of the universe</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>⚙️ Phase 2 — Frontend Mastery</h2>
+    <ul>
+      <li>Advanced JavaScript (async, APIs)</li>
+      <li>Three.js & WebGL — 3D worlds</li>
+      <li>Performance & accessibility</li>
+      <li>Mobile‑first cinematic UX</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🧠 Phase 3 — Intelligence</h2>
+    <ul>
+      <li>User‑behavior tracking</li>
+      <li>Adaptive UI (AI‑like reactions)</li>
+      <li>State & data flow understanding</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🌌 Phase 4 — Backend & Beyond</h2>
+    <ul>
+      <li>Python / Node.js</li>
+      <li>Databases (PostgreSQL, MongoDB)</li>
+      <li>APIs & Authentication</li>
+      <li>Deployment & scaling</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  You are not learning code. You are learning how to create universes: akhostai-dev
+</footer>
+
+<!--CINEMATIC AUDIO WITH animation -->
+<audio id="ambient" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3c45d97a57.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/*AUDIO ON FIRST INTERACTION FOR USER*/
+const audio = document.getElementById('ambient');
+window.addEventListener('click', () => audio.play(), { once: true });
+
+/*LIGHT / DARK TOGGLE JUST CLICK*/
+document.querySelector('.toggle').onclick = () => document.body.classList.toggle('light');
+
+/*SCROLL REVEAL FOR USER */
+const cards = document.querySelectorAll('.card');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
+},{threshold:0.2});
+cards.forEach(c => observer.observe(c));
+
+/*THREE.JS STARFIELD + ALIEN  AND INTERACT*/
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('.webgl'), alpha:true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+const starsGeo = new THREE.BufferGeometry();
+const starCount = 2000;
+const pos = new Float32Array(starCount * 3);
+for(let i=0;i<starCount*3;i++) pos[i] = (Math.random()-0.5)*600;
+starsGeo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+const stars = new THREE.Points(starsGeo, new THREE.PointsMaterial({color:0x7df9ff}));
+scene.add(stars);
+
+//(Alien face (simple mysterious sphere) HERE)
+const alien = new THREE.Mesh(
+  new THREE.SphereGeometry(6,32,32),
+  new THREE.MeshStandardMaterial({ emissive: 0x00ffcc, emissiveIntensity: 1 })
+);
+alien.position.z = -50;
+alien.visible = false;
+scene.add(alien);
+
+const light = new THREE.PointLight(0x7df9ff,2);
+light.position.set(10,10,10);
+scene.add(light);
+
+camera.position.z = 80;
+
+let t = 0;
+function animate(){
+  t+=0.002;
+  stars.rotation.y += 0.0004;
+  if(Math.sin(t) > 0.98) alien.visible = true;
+  if(Math.sin(t) < 0.5) alien.visible = false;
+  alien.rotation.y += 0.01;
+  renderer.render(scene,camera);
+  requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener('resize',()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+
+</body>
+</html>
